@@ -101,7 +101,7 @@ class Debug {
         static public var BROADTOTAL = 0;
     #end
 
-    #if (flash9||openfl||nme)
+    #if (flash9||openfl||nme||pixi)
 
     !!/**
     !! * Create a flash/openfl||nme Shape representing the given Body.
@@ -110,10 +110,16 @@ class Debug {
     !! * @return A flash/openfl||nme.display.Shape representing Body.
     !! * @throws # If body is null.
     !! */
-    keep public static function createGraphic(body:Body):flash.display.Shape {
+    keep public static function createGraphic(body:Body):#if !pixi flash.display.Shape #else pixi.core.graphics.Graphics #end {
         DEBUG(if(body==null) throw "Error: Cannot create debug graphic for null Body";)
-        var ret = new flash.display.Shape();
-        var graphics = ret.graphics;
+        #if pixi
+        var graphics = new pixi.core.graphics.Graphics();
+        graphics.interactive = false;
+        graphics.interactiveChildren = false;
+        #else
+        var ret=new flash.display.Shape();
+        var graphics=ret.graphics;
+        #end
 
         var idc:Int = fastint(0xffffff*Math.exp(-body.id/1500));
         var _r = (((idc&0xff0000)>>16))*0.7;
@@ -145,7 +151,7 @@ class Debug {
             }
         }
 
-        return ret;
+        return #if pixi graphics #else ret #end;
     }
 
     !!/**
@@ -261,11 +267,13 @@ class Debug {
         colour = null;
     }
 
+
     !!/**
     !! * The flash/openfl||nme native display object representing debug draw.
     !! * <br/><br/>
     !! * When using debug drawer, you should add this to your display list.
     !! */
+    #if !pixi
     property(display, flash.display.DisplayObject, {
         #if flash10
             var ret:flash.display.DisplayObject;
@@ -276,6 +284,11 @@ class Debug {
             return pr(inner).d_shape.shape;
         #end
     })
+    #else
+    property(display, pixi.core.graphics.Graphics, {
+            return pr(inner).d_shape.graphics;
+        })
+    #end
 
     !!/**
     !! * When true, objects outside the debug draw screen will not be drawn.

@@ -19,6 +19,6 @@ cat > haxelib.json << EOT
 EOT
 rm -f napelib.zip
 zip -r napelib .
-haxelib local napelib.zip
+haxelib install napelib.zip "nape" "local" --always
 cd ../
 

@@ -1,7 +1,7 @@
 package nape.util;
 $(import);
 
-#if (flash9||openfl||nme)
+#if (flash9||openfl||nme||pixi)
 
 !!/**
 !! * Implementation of nape debug draw using flash/openfl||nme graphics API.
@@ -51,7 +51,7 @@ $(import);
         pr(inner).outer = this;
 
         this.bgColour = bgColour;
-        this.thickness = 0.1;
+        this.thickness = #if !pixi 0.1 #else 1 #end;
     }
 
     !!/**
@@ -107,7 +107,11 @@ $(import);
         g.lineStyle(thickness,colour&0xffffff,1);
         if(pr(inner).xnull) {
             g.moveTo(start.x,start.y);
+            #if pixi
+            g.quadraticCurveTo(control.x,control.y,end.x,end.y);
+            #else
             g.curveTo(control.x,control.y,end.x,end.y);
+            #end
 
             WEAK(start);
             WEAK(control);
@@ -117,7 +121,11 @@ $(import);
             var v = pr(inner).xform.outer.transform(control);
             var q = pr(inner).xform.outer.transform(end);
             g.moveTo(u.x,u.y);
+            #if pixi
+            g.quadraticCurveTo(v.x,v.y,q.x,q.y);
+            #else
             g.curveTo(v.x,v.y,q.x,q.y);
+            #end
             u.dispose();
             v.dispose();
             q.dispose();
