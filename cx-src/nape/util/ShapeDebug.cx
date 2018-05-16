@@ -4,7 +4,7 @@ $(import);
 #if (flash9||openfl||nme||pixi)
 
 !!/**
-!! * Implementation of nape debug draw using flash/openfl||nme graphics API.
+!! * Implementation of nape debug draw using flash/openfl||nme||pixi graphics API.
 !! * <br/><br/>
 !! * This debug draw is slower than BitmapDebug which is available in flash10+
 !! * however the BitmapDebug draw makes use of Alchemy opcodes so you may wish
@@ -19,7 +19,7 @@ $(import);
 
     !!/**
     !! * Thickness to draw lines with.
-    !! * @default 0.1
+    !! * @default 0.1 //pixi defaults to 1.0
     !! */
     public var thickness:Float = 0.0;
 
