@@ -133,8 +133,6 @@ class PR(ShapeDebug) extends PR(Debug) {
         graphics = shape.graphics;
         #else
         graphics = new pixi.core.graphics.Graphics();
-        graphics.interactive = false;
-        graphics.interactiveChildren = false;
         #end
 
         isbmp = false;
